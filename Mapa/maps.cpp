@@ -30,41 +30,45 @@ int routes_classess() {
 	return 0;
 }
 
-int file_reader(string City1, string City2, int Distance, string line) {
-	ofstream FirstFile("routes.txt");
-	FirstFile << "Katowice Krakow 80" << endl << "Warszawa Lodz 220";
-	FirstFile.close();
-	ifstream File("routes.txt");
-	if (File.is_open()) {
-		while (getline(File, line)) {
-			//cout << line << endl;
-			vector<string> words;
-			istringstream iss(line);
-			string word;
-			while (iss >> word) {
-				words.push_back(word);
-			}
-			for (const auto& w : words) {
-				cout << w << " ";
-			}
-			cout << endl;
+int file_reader(string line, string file) {
+	ofstream File(file);
+	//File << "Katowice Krakow 80" << endl << "Warszawaaaa Lodz 220";
+	File.close();
+	ifstream fFile(file);
+	if (fFile.is_open()) {
+		while (getline(fFile, line)) {
+			cout << line << endl;
 		}
+		fFile.close();
+		return 0;
 	}
-	FirstFile.close();
-	return 0;
 }
 
 
 int main() {
-	string arr[3];
-	string Krakow = "Kraków";
-	string Katowice = "Katowice";
-	//int Distance = 80
-	string line;
-	file_reader(Krakow, Katowice, 80, line);
 	//routes_classess();
+
+	string line;
+	const char* file = "structures.txt";
+	ifstream ST1(file);
+	ST1.open(file);
+	if (ST1.is_open()) {
+		while (ST1) {
+			getline(ST1, line);
+			cout << line;
+		}
+	}
+	else {
+		cout << "???";
+	}
 
 	return 0;
 }
 
 
+//int city_type(string file) {
+	//ofstream File(file);
+
+
+
+//}
