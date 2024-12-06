@@ -1,0 +1,66 @@
+line by line:
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int main() {
+    std::ifstream inputFile("example.txt"); // Open the file
+    if (!inputFile.is_open()) {            // Check if the file is open
+        std::cerr << "Unable to open file" << std::endl;
+        return 1; // Exit with error code
+    }
+
+    std::string line;
+    while (std::getline(inputFile, line)) { // Read line by line
+        std::cout << line << std::endl;    // Print each line
+    }
+
+    inputFile.close(); // Close the file
+    return 0;
+}
+
+
+word by word:
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int main() {
+    std::ifstream inputFile("example.txt");
+    if (!inputFile.is_open()) {
+        std::cerr << "Unable to open file" << std::endl;
+        return 1;
+    }
+
+    std::string word;
+    while (inputFile >> word) { // Read word by word
+        std::cout << word << std::endl;
+    }
+
+    inputFile.close();
+    return 0;
+}
+
+
+entire file:
+
+#include <iostream>
+#include <fstream>
+#include <sstream> // For string streams
+
+int main() {
+    std::ifstream inputFile("example.txt");
+    if (!inputFile.is_open()) {
+        std::cerr << "Unable to open file" << std::endl;
+        return 1;
+    }
+
+    std::ostringstream buffer;
+    buffer << inputFile.rdbuf(); // Read entire file into buffer
+    std::cout << buffer.str();   // Print the content
+
+    inputFile.close();
+    return 0;
+}

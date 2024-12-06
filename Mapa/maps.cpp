@@ -31,36 +31,26 @@ int routes_classess() {
 }
 
 int file_reader(string line, string file) {
-	ofstream File(file);
-	//File << "Katowice Krakow 80" << endl << "Warszawaaaa Lodz 220";
-	File.close();
-	ifstream fFile(file);
-	if (fFile.is_open()) {
-		while (getline(fFile, line)) {
-			cout << line << endl;
-		}
-		fFile.close();
-		return 0;
+	ifstream inputFile("example.txt");
+	if (!inputFile.is_open()) {
+		cerr << "Unable to open file" << endl;
+		return 1;
 	}
+
+	ostringstream buffer;
+	buffer << inputFile.rdbuf(); // Read entire file into buffer
+	cout << buffer.str();   // Print the content
+
+	inputFile.close();
+
+	return 0;
 }
 
 
 int main() {
 	//routes_classess();
-
 	string line;
-	const char* file = "structures.txt";
-	ifstream ST1(file);
-	ST1.open(file);
-	if (ST1.is_open()) {
-		while (ST1) {
-			getline(ST1, line);
-			cout << line;
-		}
-	}
-	else {
-		cout << "???";
-	}
+	file_reader(line, "example");
 
 	return 0;
 }
