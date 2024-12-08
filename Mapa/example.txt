@@ -1,7 +1,4 @@
-aaaaa
-a
-
-a
-a
-aa
-aaaaa
+ala ma kota
+kot ale
+ma
+a to jest plik ---> testowy.

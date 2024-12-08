@@ -1,0 +1,4 @@
+Sosnowiec;Krakow;60
+Czeladz;Sosnowiec;7
+Katowice;Sosnowiec;10
+Bedzin;Czeladz;4
