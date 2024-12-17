@@ -4,6 +4,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <map>
+#include <algorithm>
+#include <set>
 
 using namespace std;
 
@@ -30,78 +33,30 @@ int routes_classess() {
 	return 0;
 }
 
-int file_reader(string line, string file) {
-	ifstream inputFile("example.txt");
-	if (!inputFile.is_open()) {
-		cerr << "Unable to open file" << endl;
-		return 1;
-	}
 
-	ostringstream buffer;
-	buffer << inputFile.rdbuf(); // Read entire file into buffer
-	cout << buffer.str();   // Print the content
-
-	inputFile.close();
-
-	return 0;
-}
-
-int file_wbw_reader(string line, string file) {
-	ifstream inputFile("example.txt");
-	if (!inputFile.is_open()) {
-		cerr << "Unable to open file" << endl;
-		return 1;
-	}
-
-	string word;
-	while (inputFile >> word) { // Read word by word
-		cout << word << endl;
-	}
-
-	inputFile.close();
-}
-
-int file_lbl_reader(string line, const string& file, vector<string>& words) {
-	ifstream inputFile(file); // Open the file
-	if (!inputFile.is_open()) {            // Check if the file is open
-		cerr << "Unable to open file" << endl;
-		return 1; // Exit with error code
-	}
-
-
-	while (getline(inputFile, line)) { // Read line by line
-		cout << line << endl;
-		stringstream ss(line);
-		string word;
-		while (ss >> word) {
-			words.push_back(word);
-			cout << word << " ";
-			cout << "koniec linii.";
-		}
-	}
-
-		inputFile.close(); // Close the file
-	}
-
-vector<City> read_lines(string fileName) 
+vector<City> read_lines(const string &fileName) 
 {
 	ifstream file(fileName);
 	string lineFromFile;
 	vector<City> result;
-	const char* del = ";";
+	const char* del = ";";	
 	
 	while (getline(file, lineFromFile))
 	{
-		//const char* line = lineFromFile.c_str(); // Tablica char (const char*)
-		//cout << line << endl;
+		stringstream lineCheck(lineFromFile);
+		string token;
+		vector<string> foundWords;
+
+		while (getline(lineCheck, token, ';')) {
+			foundWords.push_back(token);
+		}
 
 		// to do optymalizacji pozniej.
-		char* line = new char[lineFromFile.length() + 1];
+		/*char* line = new char[lineFromFile.length() + 1];
 		strcpy_s(line, lineFromFile.length() + 1, lineFromFile.c_str());
 		
 		char* next_token1 = NULL;
 		char* token1 = NULL;
-		vector<char*> foundWords;
 
 		token1 = strtok_s(line, del, &next_token1);
 		while ((token1 != NULL)) 
@@ -109,42 +64,69 @@ vector<City> read_lines(string fileName)
 			foundWords.push_back(token1);
 			token1 = strtok_s(NULL, del, &next_token1);
 		}
+		*/
 
-		if (foundWords.size() != 3) 
-		{
+		if (foundWords.size() != 3) {
 			vector<City> emptyResult;
+			cout << "Error: Incorrect number of words in the lines.";
 			return emptyResult;
 		}
 
 		int kmAsInt;
-		char* km = foundWords[2];
-		try 
-		{
+		string km = foundWords[2];
+
+		try {
 			kmAsInt = stoi(km, 0, 10);
 		}
-		catch(...)
-		{
+		catch(...) {
 			vector<City> emptyResult;
+			cout << "Error: Invalid distance format.";
 			return emptyResult;
 		}
 
-		City city_item;
-		city_item.CityName = foundWords[0];
-		city_item.DestinationName = foundWords[1];
-		city_item.Distance = kmAsInt;
-		result.push_back(city_item);
+		City cityItem;
+		cityItem.CityName = foundWords[0];
+		cityItem.DestinationName = foundWords[1];
+		cityItem.Distance = kmAsInt;
+		result.push_back(cityItem);
 	}
 
 	return result;
 }
 
+void matrix(const vector<string>& cities) {
+
+	vector<vector<string>> cityMatrix;
+
+	for (int i = 0; i < cities.size(); i++) {
+
+	}
+
+}
+
 int main() {
 	vector<City> mapItems = read_lines("exampleCities.txt");
-	//cout << mapItems.size() << " ";
-	for (City city : mapItems)
-	{
+	cout << mapItems.size() << " ";
+	vector<string> sorted;
+
+	for (const City& city : mapItems) {
 		cout << city.CityName << " " << city.DestinationName << " " << city.Distance << endl;
+	}
+	for (const City& city : mapItems) {
+		sorted.push_back(city.CityName);
+		sorted.push_back(city.DestinationName);
+	}
+	for (const auto& srt : sorted) {
+		cout << srt << "; ";
+	}
+	cout << endl;
+
+	set<string> unique(sorted.begin(), sorted.end());
+	vector<string> uniques(unique.begin(), unique.end());
+
+	for (const auto& srt : uniques) {
+		cout << srt << "; ";
 	}
 
 	return 0;
-}
+	}

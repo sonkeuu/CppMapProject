@@ -1,4 +1,5 @@
-Sosnowiec;Krakow;60
-Czeladz;Sosnowiec;7
-Katowice;Sosnowiec;10
-Bedzin;Czeladz;4
+Warszawa;Krakow;300
+Bedzin;Sosnowiec;7
+Dabrowa;Czestochowa;120
+Krakow;Czeladz;140
+Warszawa;Czeladz;320
