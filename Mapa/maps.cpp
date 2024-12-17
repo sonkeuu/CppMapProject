@@ -92,6 +92,9 @@ vector<City> read_lines(string fileName)
 	
 	while (getline(file, lineFromFile))
 	{
+		//const char* line = lineFromFile.c_str(); // Tablica char (const char*)
+		//cout << line << endl;
+
 		// to do optymalizacji pozniej.
 		char* line = new char[lineFromFile.length() + 1];
 		strcpy_s(line, lineFromFile.length() + 1, lineFromFile.c_str());
@@ -136,27 +139,12 @@ vector<City> read_lines(string fileName)
 }
 
 int main() {
-	//routes_classess();
-	string line;
-	//file_reader(line, "example");
-	//file_wbw_reader(line, "example");
-	vector<string> words;
-	//file_lbl_reader(line, "example.txt", words);
 	vector<City> mapItems = read_lines("exampleCities.txt");
-	cout << mapItems.size() << " ";
-
+	//cout << mapItems.size() << " ";
 	for (City city : mapItems)
 	{
-		cout << city.CityName << " ";
+		cout << city.CityName << " " << city.DestinationName << " " << city.Distance << endl;
 	}
 
 	return 0;
 }
-
-
-//int city_type(string file) {
-	//ofstream File(file);
-
-
-
-//}
