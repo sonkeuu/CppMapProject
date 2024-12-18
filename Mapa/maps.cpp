@@ -96,10 +96,32 @@ vector<City> read_lines(const string &fileName)
 
 void matrix(const vector<string>& cities) {
 
-	vector<vector<string>> cityMatrix;
+	vector<vector<string>> cityMatrix(cities.size(), vector<string>(cities.size()));
 
 	for (int i = 0; i < cities.size(); i++) {
+		for (int j = 0; j < cities.size(); j++) {
+			cityMatrix[i][j] = cities[i];
+		}
+	}
 
+	for (const auto& row : cityMatrix) {
+		for (const auto& city : row) {
+			cout << city << "	";
+		}
+		cout << endl;
+	}
+	cout << endl << endl;
+
+	for (int i = 1; i < cities.size(); i++) {
+		for (int j = 1; j < cities.size(); j++) {
+			cityMatrix[i][j] = "X";
+		}
+	}
+	for (const auto& row : cityMatrix) {
+		for (const auto& city : row) {
+			cout << city << "		";
+		}
+		cout << endl;
 	}
 
 }
@@ -127,6 +149,9 @@ int main() {
 	for (const auto& srt : uniques) {
 		cout << srt << "; ";
 	}
+	cout << endl << endl;
+
+	matrix(uniques);
 
 	return 0;
 	}
