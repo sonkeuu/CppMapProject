@@ -39,8 +39,7 @@ vector<City> read_lines(const string &fileName)
 	ifstream file(fileName);
 	string lineFromFile;
 	vector<City> result;
-	const char* del = ";";	
-	
+		
 	while (getline(file, lineFromFile))
 	{
 		stringstream lineCheck(lineFromFile);
@@ -94,6 +93,17 @@ vector<City> read_lines(const string &fileName)
 	return result;
 }
 
+int get_city_index(vector<string> cities, string cityToFind)
+{
+	int size = cities.size();
+	for (int i = 0; i < size; i++) {
+		if (cities[i] == cityToFind) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 void matrix(const vector<string>& cities) {
 
 	vector<vector<string>> cityMatrix(cities.size(), vector<string>(cities.size()));
@@ -145,6 +155,31 @@ int main() {
 
 	set<string> unique(sorted.begin(), sorted.end());
 	vector<string> uniques(unique.begin(), unique.end());
+
+	
+	
+	
+	
+	int mtx_size = uniques.size();
+	int* arr = new int[mtx_size * mtx_size];
+	for (const City& city : mapItems)
+	{
+		int line = get_city_index(uniques, city.CityName);
+		int column = get_city_index(uniques, city.DestinationName);
+		if (line >= 0 && column >= 0) 
+		{
+			*(arr + line * mtx_size + column) = city.Distance;
+			cout << city.Distance;
+			cout << endl;
+		}
+	}
+
+
+	
+
+
+	
+
 
 	for (const auto& srt : uniques) {
 		cout << srt << "; ";
