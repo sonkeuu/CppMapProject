@@ -3,3 +3,7 @@ Bedzin;Sosnowiec;7
 Dabrowa;Czestochowa;120
 Krakow;Czeladz;140
 Warszawa;Czeladz;320
+Sosnowiec;Czeladz;5
+Krakow;Poznan;410
+Poznan;Dabrowa;340
+Gdansk;Wisla;750

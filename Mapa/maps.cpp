@@ -4,7 +4,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <map>
 #include <algorithm>
 #include <set>
 
@@ -14,25 +13,7 @@ struct City {
 	string CityName;
 	string DestinationName;
 	int Distance;
-} route1, route2, route3, route4, route5, route6;
-
-
-int routes_classess() {
-	route1.CityName = "Krakow";
-	route1.DestinationName = "Gliwice";
-	route1.Distance = 120;
-
-	route2.CityName = "Katowice";
-	route2.DestinationName = "Warszawa";
-	route2.Distance = 250;
-
-	cout << route1.CityName << " ---> " << route1.DestinationName << "	" << route1.Distance << endl;
-	cout << route2.CityName << " ---> " << route2.DestinationName << "	" << route2.Distance << endl;
-	cout << "Full route: " << route1.Distance + route2.Distance;
-
-	return 0;
-}
-
+};
 
 vector<City> read_lines(const string &fileName) 
 {
@@ -156,37 +137,55 @@ int main() {
 	set<string> unique(sorted.begin(), sorted.end());
 	vector<string> uniques(unique.begin(), unique.end());
 
-	
-	
-	
-	
-	int mtx_size = uniques.size();
-	int* arr = new int[mtx_size * mtx_size];
-	for (const City& city : mapItems)
-	{
-		int line = get_city_index(uniques, city.CityName);
-		int column = get_city_index(uniques, city.DestinationName);
-		if (line >= 0 && column >= 0) 
-		{
-			*(arr + line * mtx_size + column) = city.Distance;
-			cout << city.Distance;
-			cout << endl;
-		}
-	}
-
-
-	
-
-
-	
-
-
 	for (const auto& srt : uniques) {
 		cout << srt << "; ";
 	}
-	cout << endl << endl;
 
-	matrix(uniques);
+
+
+
+	int mtx_size = uniques.size();
+	int* arr = new int[mtx_size * mtx_size];
+
+	for (int i = 0; i < mtx_size; i++) {
+		for (int j = 0; j < mtx_size; j++) {
+			*(arr + i * mtx_size + j) = 0;
+		}
+	}
+
+	for (const City& city : mapItems) {
+
+		int line = get_city_index(uniques, city.CityName);
+		int column = get_city_index(uniques, city.DestinationName);
+		if (line >= 0 && column >= 0) {
+			*(arr + line * mtx_size + column) = city.Distance;
+			//cout << city.Distance;
+			//cout << endl;
+		}
+
+		//int line2 = get_city_index(uniques, city.DestinationName);
+		//int column2 = get_city_index(uniques, city.CityName);
+		//if (line2 >= 0 && column2 >= 0) {
+		//	*(arr + line2 * mtx_size + column2) = city.Distance;
+			//cout << city.Distance;
+			//cout << endl;
+		//}
+
+	}
+
+	cout << endl;
+	for (int i = 0; i < mtx_size; i++) {
+		for (int j = 0; j < mtx_size; j++) {
+			cout << *(arr + i * mtx_size + j) << "	";
+		}
+		cout << endl;
+	}
+
+
+
+	//cout << endl << endl;
+
+	//matrix(uniques);
 
 	return 0;
-	}
+}
