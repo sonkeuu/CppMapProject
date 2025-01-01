@@ -7,3 +7,8 @@ Sosnowiec;Czeladz;5
 Krakow;Poznan;410
 Poznan;Dabrowa;340
 Gdansk;Wisla;750
+Wisla;Warszawa;230
+Wisla;Dabrowa;115
+Bedzin;Czestochowa;70
+Sosnowiec;Poznan;500
+Gdansk;Sosnowiec;630
