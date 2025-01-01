@@ -207,6 +207,40 @@ void print_route(int* matrix, int size, int x, int y, vector<string> cities)
 	}
 }
 
+void droga_floyd(int* matrix, int size, int i, int j, vector<string> cities)
+{
+	int k = get_matrix_value(matrix, size, i, j);
+	if (k != 0) 
+	{
+		droga_floyd(matrix, size, i, k, cities);
+		cout << cities[k] << endl;
+		droga_floyd(matrix, size, k, j, cities);
+	}
+}
+
+void print_floyd_route(int* matrix, int size, int x, int y, vector<string> cities) 
+{
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size; j++)
+		{
+			if (get_matrix_value(matrix, size, i, j) == 10000) 
+			{
+				cout << "route not exists.";
+			}
+			else 
+			{
+				if (i != j) 
+				{
+					cout << cities[i] << " => " << cities[j] << " koszt " << get_matrix_value(matrix, size, i, j) << " Droga przez: ";
+					droga_floyd(matrix, size, i, j, cities);
+					cout << endl;
+				}
+			}
+		}
+	}
+}
+
 void write_route(int* arr2, int mtx_size) {
 	for (int x = 0; x < mtx_size; x++) {
 		for (int y = 0; y < mtx_size; y++) {
@@ -360,6 +394,75 @@ int main() {
 	cout << endl;
 	print_matrix(route_matrix, mtx_size, uniques);
 	print_route(route_matrix, mtx_size, get_city_index(uniques, "*0*"), get_city_index(uniques, "*2*"), uniques);
+
+	// floyd from here
+	
+	int* floyd_result_matrix = create_matrix(mtx_size);
+	int* floyd_route_matrix = create_matrix(mtx_size);
+	fill_matrix(floyd_route_matrix, mapItems, uniques, mtx_size, true);
+	cout << "after fill floyd_route_matrix";
+	cout << endl;
+	print_matrix(floyd_route_matrix, mtx_size, uniques);
+	cout << endl;
+	print_matrix(floyd_result_matrix, mtx_size, uniques);
+
+	for (int x = 0; x < mtx_size; x++) 
+	{
+		for (int y = 0; y < mtx_size; y++)
+		{
+			if (get_matrix_value(floyd_route_matrix, mtx_size, x, y) == 0) 
+			{
+				set_matrix_value(floyd_route_matrix, mtx_size, x, y, 10000);
+			}
+		}
+	}
+	
+	for (int k = 0; k < mtx_size; k++) 
+	{
+		for (int i = 0; i < mtx_size; i++) 
+		{
+			for (int j = 0; j < mtx_size; j++) 
+			{
+				
+				int a = get_matrix_value(floyd_route_matrix, mtx_size, i, j);
+				int b = get_matrix_value(floyd_route_matrix, mtx_size, i, k) + get_matrix_value(floyd_route_matrix, mtx_size, k, j);
+				/*
+				set_matrix_value(floyd_route_matrix, mtx_size, i, j, min(a, b));
+				*/
+				if (b < a) 
+				{
+					set_matrix_value(floyd_route_matrix, mtx_size, i, j, b);
+					set_matrix_value(floyd_result_matrix, mtx_size, i, j, k);
+				}
+			}
+		}
+	}
+
+	/*
+	for (int x = 0; x < mtx_size; x++)
+	{
+		for (int y = 0; y < mtx_size; y++)
+		{
+			if (get_matrix_value(floyd_route_matrix, mtx_size, x, y) == 10000)
+			{
+				set_matrix_value(floyd_route_matrix, mtx_size, x, y, 0);
+			}
+		}
+	}
+	*/
+
+	cout << endl;
+	print_matrix(floyd_route_matrix, mtx_size, uniques);
+	cout << endl;
+	print_matrix(floyd_result_matrix, mtx_size, uniques);
+	cout << "XXXX";
+	cout << endl;
+	//print_route(floyd_result_matrix, mtx_size, get_city_index(uniques, "*0*"), get_city_index(uniques, "*2*"), uniques);
+	print_floyd_route(floyd_result_matrix, mtx_size, get_city_index(uniques, "*0*"), get_city_index(uniques, "*2*"), uniques);
+
+
+	
+	
 
 
 
