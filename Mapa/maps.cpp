@@ -10,11 +10,13 @@
 
 using namespace std;
 
-struct City {
+struct CityWithDistance {
 	string CityName;
 	string DestinationName;
 	int Distance;
 };
+
+
 
 int get_city_index(vector<string> cities, string cityToFind);
 
@@ -54,8 +56,8 @@ int* create_matrix(int size) {
 	return arr;
 }
 
-void fill_matrix(int* matrix, vector<City> mapItems, vector<string> uniques, int mtx_size, bool useDistance) {
-	for (const City& city : mapItems) {
+void fill_matrix(int* matrix, vector<CityWithDistance> mapItems, vector<string> uniques, int mtx_size, bool useDistance) {
+	for (const CityWithDistance& city : mapItems) {
 
 		int line = get_city_index(uniques, city.CityName);
 		int column = get_city_index(uniques, city.DestinationName);
@@ -66,10 +68,10 @@ void fill_matrix(int* matrix, vector<City> mapItems, vector<string> uniques, int
 	}
 }
 
-vector<City> read_lines(const string &fileName) {
+vector<CityWithDistance> read_lines(const string &fileName) {
 	ifstream file(fileName);
 	string lineFromFile;
-	vector<City> result;
+	vector<CityWithDistance> result;
 		
 	while (getline(file, lineFromFile)) {
 		stringstream lineCheck(lineFromFile);
@@ -81,7 +83,7 @@ vector<City> read_lines(const string &fileName) {
 		}
 
 		if (foundWords.size() != 3) {
-			vector<City> emptyResult;
+			vector<CityWithDistance> emptyResult;
 			cout << "Error: Incorrect number of words in the lines.";
 			return emptyResult;
 		}
@@ -93,12 +95,12 @@ vector<City> read_lines(const string &fileName) {
 			kmAsInt = stoi(km, 0, 10);
 		}
 		catch(...) {
-			vector<City> emptyResult;
+			vector<CityWithDistance> emptyResult;
 			cout << "Error: Invalid distance format.";
 			return emptyResult;
 		}
 
-		City cityItem;
+		CityWithDistance cityItem;
 		cityItem.CityName = foundWords[0];
 		cityItem.DestinationName = foundWords[1];
 		cityItem.Distance = kmAsInt;
@@ -224,10 +226,12 @@ void print_floyd_route(int* matrix, int size, int x, int y, vector<string> citie
 	{
 		for (int j = 0; j < size; j++)
 		{
-			if (get_matrix_value(matrix, size, i, j) == 10000) 
+			if (get_matrix_value(matrix, size, i, j) == 10000)
 			{
-				cout << "route not exists.";
-			}
+				cout << cities[i] << " --> " << cities[j] << " - route not exists.";
+				cout << endl;
+				break;				
+			} 
 			else 
 			{
 				if (i != j) 
@@ -240,6 +244,56 @@ void print_floyd_route(int* matrix, int size, int x, int y, vector<string> citie
 		}
 	}
 }
+
+void matrix_minimum_value(int* matrix, int* matrix_to_save_routes, int size) {
+	for (int k = 0; k < size; k++)
+	{
+		for (int i = 0; i < size; i++)
+		{
+			for (int j = 0; j < size; j++)
+			{
+
+				int a = get_matrix_value(matrix, size, i, j);
+				int b = get_matrix_value(matrix, size, i, k) + get_matrix_value(matrix, size, k, j);
+				/*
+				set_matrix_value(floyd_route_matrix, mtx_size, i, j, min(a, b));
+				*/
+				if (b < a)
+				{
+					set_matrix_value(matrix, size, i, j, b);
+					set_matrix_value(matrix_to_save_routes, size, i, j, k);
+				}
+			}
+		}
+	}
+}
+
+void fill_10000(int* matrix, int size) {
+	for (int x = 0; x < size; x++)
+	{
+		for (int y = 0; y < size; y++)
+		{
+			if (get_matrix_value(matrix, size, x, y) == 0)
+			{
+				set_matrix_value(matrix, size, x, y, 10000);
+			}
+		}
+	}
+}
+
+void fill_0(int* matrix, int size) {
+	for (int x = 0; x < size; x++)
+	{
+		for (int y = 0; y < size; y++)
+		{
+			if (get_matrix_value(matrix, size, x, y) == 10000)
+			{
+				set_matrix_value(matrix, size, x, y, 0);
+			}
+		}
+	}
+}
+
 
 void write_route(int* arr2, int mtx_size) {
 	for (int x = 0; x < mtx_size; x++) {
@@ -269,72 +323,16 @@ void floyd(int* arr, int * arr2, int mtx_size) {
 	}
 }
 
-void look_around(int* arr, int mtx_size, int* V, int i) {
-	V[i] = 1;
-	for (int k = 0; k < mtx_size; k++) {
-		if (get_matrix_value(arr, mtx_size, i, k) != 0) {
-			if (V[k] == 0) {
-				cout << V[k];
-				look_around(arr, mtx_size, V, k);
-			}
-		}
-	}
-}
-
-void search(int* arr, int mtx_size, int* V) {
-	for (int i = 0; i < mtx_size; i++) {
-		V[i] = 0;
-	}
-	for (int i = 0; i < mtx_size; i++) {
-		if (V[i] == 0) {
-			cout << V[i];
-			look_around(arr, mtx_size, V, i);
-		}
-	}
-}
-
-
-void matrix(const vector<string>& cities) {
-
-	vector<vector<string>> cityMatrix(cities.size(), vector<string>(cities.size()));
-
-	for (int i = 0; i < cities.size(); i++) {
-		for (int j = 0; j < cities.size(); j++) {
-			cityMatrix[i][j] = cities[i];
-		}
-	}
-
-	for (const auto& row : cityMatrix) {
-		for (const auto& city : row) {
-			cout << city << "	";
-		}
-		cout << endl;
-	}
-	cout << endl << endl;
-
-	for (int i = 1; i < cities.size(); i++) {
-		for (int j = 1; j < cities.size(); j++) {
-			cityMatrix[i][j] = "X";
-		}
-	}
-	for (const auto& row : cityMatrix) {
-		for (const auto& city : row) {
-			cout << city << "		";
-		}
-		cout << endl;
-	}
-
-}
 
 int main() {
-	vector<City> mapItems = read_lines("example.txt");
+	vector<CityWithDistance> mapItems = read_lines("example.txt");
 	cout << mapItems.size() << " ";
 	vector<string> sorted;
 
-	for (const City& city : mapItems) {
+	for (const CityWithDistance& city : mapItems) {
 		cout << city.CityName << " " << city.DestinationName << " " << city.Distance << endl;
 	}
-	for (const City& city : mapItems) {
+	for (const CityWithDistance& city : mapItems) {
 		sorted.push_back(city.CityName);
 		sorted.push_back(city.DestinationName);
 	}
@@ -396,6 +394,9 @@ int main() {
 	print_route(route_matrix, mtx_size, get_city_index(uniques, "*0*"), get_city_index(uniques, "*2*"), uniques);
 
 	// floyd from here
+
+	delete[] route_matrix;
+	delete[] distances_matrix;
 	
 	int* floyd_result_matrix = create_matrix(mtx_size);
 	int* floyd_route_matrix = create_matrix(mtx_size);
@@ -406,37 +407,12 @@ int main() {
 	cout << endl;
 	print_matrix(floyd_result_matrix, mtx_size, uniques);
 
-	for (int x = 0; x < mtx_size; x++) 
-	{
-		for (int y = 0; y < mtx_size; y++)
-		{
-			if (get_matrix_value(floyd_route_matrix, mtx_size, x, y) == 0) 
-			{
-				set_matrix_value(floyd_route_matrix, mtx_size, x, y, 10000);
-			}
-		}
-	}
+
+	fill_10000(floyd_route_matrix, mtx_size);
+	matrix_minimum_value(floyd_route_matrix, floyd_result_matrix, mtx_size);
+
 	
-	for (int k = 0; k < mtx_size; k++) 
-	{
-		for (int i = 0; i < mtx_size; i++) 
-		{
-			for (int j = 0; j < mtx_size; j++) 
-			{
-				
-				int a = get_matrix_value(floyd_route_matrix, mtx_size, i, j);
-				int b = get_matrix_value(floyd_route_matrix, mtx_size, i, k) + get_matrix_value(floyd_route_matrix, mtx_size, k, j);
-				/*
-				set_matrix_value(floyd_route_matrix, mtx_size, i, j, min(a, b));
-				*/
-				if (b < a) 
-				{
-					set_matrix_value(floyd_route_matrix, mtx_size, i, j, b);
-					set_matrix_value(floyd_result_matrix, mtx_size, i, j, k);
-				}
-			}
-		}
-	}
+
 
 	/*
 	for (int x = 0; x < mtx_size; x++)
@@ -457,71 +433,18 @@ int main() {
 	print_matrix(floyd_result_matrix, mtx_size, uniques);
 	cout << "XXXX";
 	cout << endl;
+	//fill_0(floyd_route_matrix, mtx_size);
+	cout << endl;
+	print_matrix(floyd_result_matrix, mtx_size, uniques);
+
+
 	//print_route(floyd_result_matrix, mtx_size, get_city_index(uniques, "*0*"), get_city_index(uniques, "*2*"), uniques);
-	print_floyd_route(floyd_result_matrix, mtx_size, get_city_index(uniques, "*0*"), get_city_index(uniques, "*2*"), uniques);
+	print_floyd_route(floyd_route_matrix, mtx_size, get_city_index(uniques, "*0*"), get_city_index(uniques, "*2*"), uniques);
 
-
-	
-	
-
-
-
-
-	
-	
-	
-	
-	
 	//write_if_route_exists(warshall_matrix_done, mtx_size, get_city_index(uniques, "Bedzin"), get_city_index(uniques, "Czeladz"), uniques);
 	
 
-
 	// first algorithm here.
-
-	
-
-	cout << endl;
-	cout << "Warshall: " << endl;
-	for (int i = 0; i < mtx_size; i++) {
-		for (int j = 0; j < mtx_size; j++) {
-			cout << *(distances_matrix + i * mtx_size + j) << "	";
-		}
-		cout << endl;
-	}
-
-	//write_if_route_exists(arr, mtx_size, 2, 5);
-	write_route(distances_matrix, mtx_size);
-
-	cout << "Possible routes: " << endl;
-	for (int i = 0; i < mtx_size; i++) {
-		for (int j = 0; j < mtx_size; j++) {
-			cout << *(distances_matrix + i * mtx_size + j) << "	";
-		}
-		cout << endl;
-	}
-
-	int* arr2 = new int[mtx_size * mtx_size];
-	floyd(distances_matrix, arr2, mtx_size);
-
-	cout << "Floyd: " << endl;
-	for (int i = 0; i < mtx_size; i++) {
-		for (int j = 0; j < mtx_size; j++) {
-			cout << *(distances_matrix + i * mtx_size + j) << "	";
-		}
-		cout << endl;
-	}
-
-	int i = 0;
-	int n;
-	int *V = new int[mtx_size];
-
-	search(distances_matrix, mtx_size, V);
-	look_around(distances_matrix, mtx_size, V, i);
-
-
-	//cout << endl << endl;
-
-	//matrix(uniques);
 
 	return 0;
 }
