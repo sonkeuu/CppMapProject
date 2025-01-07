@@ -18,7 +18,7 @@ int main() {
 	string FileWithCitiesToFind = "cities2.txt";
 	string FileToSaveResult = "output.txt";
 
-	bool toFile = true;
+	/*bool toFile = true;
 	ostream* out;
 	ofstream outFile;
 	if (toFile) {
@@ -35,7 +35,7 @@ int main() {
 
 	if (toFile) {
 		outFile.close();
-	}
+	}*/
 
 	vector<City> mapItems = read_cities_distances(FileWithDistances);
 	vector<string> sorted;
@@ -69,13 +69,24 @@ int main() {
 	vector<string> toFind;
 
 	items_to_vector(mapItems_2, toFind);
+
+	ofstream FileToSave(FileToSaveResult);
+	if (!FileToSave) {
+		cout << "Error opening file to save results." << endl;
+		return 1;
+	}
+	else {
+		cout << "Results saved to file: " << FileToSaveResult << endl;
+	}
 		
 	for (const City& city : mapItems_2) {
 		int u = get_city_index(uniques, city.CityName);
 		int v = get_city_index(uniques, city.DestinationName);
-		find_routes(distance, next_city, uniques, u, v);
-		*out << endl << endl;
+		find_routes(distance, next_city, uniques, u, v, FileToSave);
+		FileToSave << endl << endl;
 	}
+
+	FileToSave.close();
 
 	return 0;
 }
