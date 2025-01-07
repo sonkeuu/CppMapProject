@@ -18,9 +18,33 @@
     <ClCompile Include="maps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="maps_input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="maps_paths.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="maps_output.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="maps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="maps_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="maps_paths.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="maps_output.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

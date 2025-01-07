@@ -128,9 +128,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="maps.cpp" />
+    <ClCompile Include="maps_input.cpp" />
+    <ClCompile Include="maps_output.cpp" />
+    <ClCompile Include="maps_paths.cpp" />
+    <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="maps.h" />
+    <ClInclude Include="maps_input.h" />
+    <ClInclude Include="maps_output.h" />
+    <ClInclude Include="maps_paths.h" />
+    <ClInclude Include="utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
