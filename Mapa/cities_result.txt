@@ -1,0 +1,15 @@
+trasa: Katowice --> Torun (355 km)
+Katowice --> Czestochowa (70 km)
+Czestochowa --> Lodz (120 km)
+Lodz --> Torun (165 km)
+
+trasa: Krakow --> Poznan (465 km)
+Krakow --> Katowice (70 km)
+Katowice --> Czestochowa (70 km)
+Czestochowa --> Lodz (120 km)
+Lodz --> Poznan (205 km)
+
+trasa: Tarnow --> Wroclaw
+Trasa niemozliwa do wyznaczenia.
+
+

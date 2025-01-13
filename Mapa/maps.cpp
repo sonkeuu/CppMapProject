@@ -16,7 +16,7 @@ int main() {
 
 	string FileWithDistances = "cities.txt";
 	string FileWithCitiesToFind = "cities2.txt";
-	string FileToSaveResult = "output.txt";
+	string FileToSaveResult = "cities_result.txt";
 
 	/*bool toFile = true;
 	ostream* out;
